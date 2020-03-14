@@ -7,18 +7,23 @@ import org.rogach.scallop.ScallopConf
 
 object HelloMain extends SparkMainTrait {
 
-  def process(configValues: ConfigValuesTrait, lineArguments0: LineArgumentValuesTrait)(
+  def process(configValues0: ConfigValuesTrait, lineArguments0: LineArgumentValuesTrait)(
     implicit spark: SparkSession): Unit = {
 
+    val configValues = configValues0.asInstanceOf[ConfigValues]
     val lineArguments = lineArguments0.asInstanceOf[CommandParameterValues]
 
-    println(s"Hello ${lineArguments.userName} from Spark")
+    println(s"Hello ${lineArguments.userName} from Spark in ${configValues.country}")
+
+    val dataPath = configValues.dataPath
+    val df = spark.read.json(dataPath)
+    df.show()
   }
 
   def getConfigValues(conf: Config): ConfigValuesTrait = {
-    //    val dataDir = conf.getString("DataDir")
-    val dataDir = "kk"
-    ConfigValues(dataDir)
+    val country = conf.getString("country")
+    val data = conf.getString("data")
+    ConfigValues(country, data)
   }
 
   def getLineArgumentsValues(args: Array[String], configValues: ConfigValuesTrait): LineArgumentValuesTrait = {
@@ -40,6 +45,6 @@ object HelloMain extends SparkMainTrait {
 
   case class CommandParameterValues(logCountsAndTimes: Boolean, userName: String) extends LineArgumentValuesTrait
 
-  case class ConfigValues(dataDir: String) extends ConfigValuesTrait
+  case class ConfigValues(country: String, dataPath: String) extends ConfigValuesTrait
 
 }

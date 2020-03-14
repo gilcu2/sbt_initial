@@ -2,7 +2,7 @@
 
 MASTER="local[8]"
 CONFIGPATH="."
-PROGRAM="../target/scala-2.11/Hello.jar"
+PROGRAM="target/scala-2.11/Hello.jar"
 MAIN=com.gilcu2.HelloMain
 OUT=hello.out
 ERR=hello.err

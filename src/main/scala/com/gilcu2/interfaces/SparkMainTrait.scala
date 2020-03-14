@@ -27,7 +27,8 @@ trait SparkMainTrait extends LazyLogging {
     logger.info(s"Arguments: $args")
 
     implicit val conf = ConfigFactory.load
-    val sparkConf = new SparkConf().setAppName("Exploration")
+    val appName = conf.getString("app")
+    val sparkConf = new SparkConf().setAppName(appName)
     implicit val spark = Spark.sparkSession(sparkConf)
 
     println(s"Begin: $beginTime Machine: ${OS.getHostname} Cores: ${Spark.getTotalCores}")
